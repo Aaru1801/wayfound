@@ -23,7 +23,7 @@
 | 0:30 | Switch to **Step-free**. Press **Door details**. | "Step-free ends at a different door: the Arbor Room entrance, a powered door at the bottom of a ramp. That is U of T's own sentence. We read all 346 entrance descriptions U of T publishes and turned them into routing rules." |
 | 0:50 | Press **Fly the route**, then stop after a few seconds. | "This is the exact path, door to door, through the City of Toronto's 3D model of campus." |
 | 1:05 | In **To**, type `MS 2158`. Press **Floors**. | "A room number in; the building, the right door and the floor out. Here the step-free route is 133 metres longer than walking." |
-| 1:25 | Press **Report a barrier**, then click the green route on the map. | "A path is blocked. Wayfound reroutes at once." |
+| 1:25 | Press **Report a barrier**, then click the green route on the map. Afterwards press **Clear barriers**, so the audit numbers below match. | "A path is blocked. Wayfound reroutes at once." |
 | 1:45 | Press **Access audit**, then **Run audit**. | "One journey is an anecdote. This routes every pair of buildings twice, walking and step-free. 47% of step-free journeys are longer than walking." |
 | 2:10 | Open the first row under **Fix first**. | "And this is the part nobody else has: every stairway on campus, ranked by how much step-free travel a ramp there would give back. It is exact, not an estimate. Number one is the stairs beside Hart House." |
 | 2:35 | Close. | "It is all open data, it runs offline from one file, and the same pipeline already builds Waterloo and McMaster." |
