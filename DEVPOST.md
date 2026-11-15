@@ -81,4 +81,4 @@ Outdoor pedestrian network only. Floors come from the room-number convention and
 
 ## AI disclosure
 
-Built with AI coding assistance (Claude Code). Routing and the audit are deterministic graph algorithms; there is no AI model in the running app.
+Built with AI coding assistance. Routing and the audit are deterministic graph algorithms; there is no AI model in the running app.

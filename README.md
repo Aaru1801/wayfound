@@ -14,17 +14,6 @@ directions, door details, floors and warnings open from their own buttons.
 
 ![Step-free route to Hart House](docs/screenshots/01-step-free-route.png)
 
-## Run
-
-```sh
-npm start                # http://127.0.0.1:4310
-npm test                 # 40 engine and dataset tests
-npm run build:offline    # writes Wayfound.html: one file, opens by double-click, no network
-```
-
-There is nothing to install. `npm start` needs Python 3 (a static file server); the tests and the offline build need
-Node 20 or newer. No API keys, accounts or environment variables.
-
 ## What it is built from
 
 | | Source |
