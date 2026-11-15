@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#153d34"><meta name="description" content="Wayfound is a campus navigation prototype that adapts to your mobility needs, explains detours, and shows which repairs restore access.">
+<title>Wayfound · Every way forward</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23153d34'/%3E%3Cpath d='M14 20l9 25 9-18 9 18 9-25' fill='none' stroke='%23c8f297' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a href="#planner" class="skip-link">Skip to route planner</a>
+<header class="topbar"><a class="brand" id="brand-home" href="#" aria-label="Wayfound home"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8l6 17 6-12 6 12 6-17"/></svg></span>wayfound</a><div class="top-note"><span class="status-dot"></span> BUILT FOR EVERY BODY</div><button class="text-button light" id="about-button">Behind the build <span aria-hidden="true">↗</span></button></header>
+<main>
+<section class="intro"><div><p class="eyebrow">LESS FRICTION. MORE POSSIBILITY.</p><h1>A way forward.<br class="mobile-break"> <em>For everyone.</em></h1><p class="subtitle">Routes that adapt to you. Even when the campus doesn’t.</p></div><button class="demo-button" id="demo-button"><span class="play-icon">▶</span> Try the 60-second demo <span aria-hidden="true">↗</span></button></section>
+<div id="demo-banner" class="demo-banner" hidden></div>
+<div class="workspace">
+<aside class="planner" id="planner" aria-label="Route planner">
+<div class="section-title"><span class="eyebrow">01 / YOUR JOURNEY</span><span class="small-icon" aria-hidden="true">↗</span></div>
+<div class="journey-inputs"><div class="journey-line" aria-hidden="true"><span></span><i></i><b></b></div><div class="select-stack"><label for="origin">STARTING FROM</label><select id="origin"></select><div class="input-divider"></div><label for="destination">HEADING TO</label><select id="destination"></select></div><button class="swap-button" id="swap" aria-label="Swap start and destination">⇅</button></div>
+<div class="preference-title">Make it your route <span>01—03</span></div>
+<div class="profiles" role="group" aria-label="Travel profile"><button data-profile="wheelchair" class="profile active" aria-pressed="true"><span class="profile-icon" data-icon="wheelchair"></span>Step-free</button><button data-profile="stroller" class="profile" aria-pressed="false"><span class="profile-icon" data-icon="stroller"></span>Stroller</button><button data-profile="walking" class="profile" aria-pressed="false"><span class="profile-icon" data-icon="walk"></span>Walking</button></div>
+<p class="profile-description" id="profile-description"></p>
+<details class="preferences"><summary>Fine-tune your needs <span>＋</span></summary><label class="range-label" for="slope">Maximum slope <strong id="slope-value">5%</strong></label><input type="range" min="0" max="15" step="1" value="5" id="slope"><label class="check-label"><input type="checkbox" id="avoid-rough" checked> Avoid uneven surfaces</label></details>
+<div id="route-summary" aria-live="polite"></div>
+<div class="planner-actions"><button class="secondary-button" id="share-button"><span data-icon="share"></span>Share route</button><button class="secondary-button" id="download-button" aria-label="Download route directions"><span data-icon="download"></span>Save</button></div>
+<div class="planner-bottom"><span data-icon="shield"></span><p>Your needs stay on this device.<br><strong>No account. No tracking.</strong></p></div>
+</aside>
+<section class="map-panel" aria-label="Campus map and access overview">
+<div class="map-toolbar"><div class="campus-heading"><span data-icon="map"></span><div><strong>Harbour Campus</strong><span>Illustrative map · not for real navigation</span></div></div><button class="map-view-button" id="graph-button" aria-pressed="false"><span data-icon="nodes"></span> Show network</button></div>
+<div class="map-container"><svg id="campus-map" viewBox="0 0 1000 720" role="group" aria-labelledby="map-title" aria-describedby="map-description"><title id="map-title">Harbour Campus accessible route map</title><desc id="map-description">Illustrative campus with interactive destination markers, pathways, stairs, a lift, and an accessible ramp.</desc></svg><div class="map-label">HARBOUR CAMPUS <span>43° N / DEMO</span></div><div class="map-controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-reset" aria-label="Fit map"><span data-icon="expand"></span></button></div><div class="map-legend"><span><i class="legend-route"></i>Your route</span><span><i class="legend-blocked"></i>Unavailable</span><span id="shortest-legend"><i class="legend-shortest"></i>Shortest walking route</span></div><div class="north"><span>↑</span>N</div></div>
+<div class="access-strip"><div><span class="pulse-dot"></span><strong id="reachability-number">5 / 5</strong><span>destinations reachable</span></div><button id="impact-button">Explore repair impact <span aria-hidden="true">↗</span></button></div>
+</section>
+</div>
+<section class="lower-grid">
+<div class="directions-panel"><div class="panel-heading"><div><p class="eyebrow">02 / EVERY STEP, EXPLAINED</p><h2>Know your way.</h2></div><span class="pill" id="directions-count">Route details</span></div><ol id="directions"></ol></div>
+<div class="conditions-panel"><div class="panel-heading"><div><p class="eyebrow">03 / A CAMPUS THAT CHANGES</p><h2>Small barriers. Big detours.</h2></div><span class="live-pill">LOCAL DEMO</span></div><p class="conditions-description">Change a connection and watch your route respond.</p><div id="barrier-list"></div><button class="report-button" id="report-button"><span data-icon="plus"></span> Report another barrier</button><p class="conditions-footnote">Reports are saved on this device for one hour. Demo reports don’t notify campus staff.</p></div>
+</section>
+<footer><div class="footer-brand">wayfound <span>Every way forward.</span></div><p>An ONHacks 2026 prototype · Fictional campus data</p><button id="reset-button" class="text-button">Reset demo <span aria-hidden="true">↺</span></button></footer>
+</main>
+<dialog id="modal" aria-labelledby="modal-eyebrow"><div class="modal-top"><span class="eyebrow" id="modal-eyebrow">WAYFOUND</span><button id="modal-close" aria-label="Close dialog">×</button></div><div id="modal-content"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>

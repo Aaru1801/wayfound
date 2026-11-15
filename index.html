@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1016">
+<meta name="description" content="Wayfound finds walking and step-free routes across campus, door to door, on a 3D map built from open data.">
+<title>Wayfound</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%235ef2a0'/%3E%3Cpath d='M7 10l4.5 12 4.5-9 4.5 9L25 10' fill='none' stroke='%2306140c' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#to-input">Skip to route planner</a>
+
+<div id="map" role="application" aria-label="3D campus map"></div>
+
+<header class="topbar">
+  <button type="button" class="brand" id="brand" aria-label="Wayfound, reset the view">
+    <svg class="brand-mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#5ef2a0"/><path d="M7 10l4.5 12 4.5-9 4.5 9L25 10" fill="none" stroke="#06140c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="brand-name">Wayfound</span>
+    <span class="brand-sub" id="brand-sub">U of T · St. George</span>
+  </button>
+  <nav class="top-actions" aria-label="Tools">
+    <button type="button" class="btn" id="audit-btn" aria-expanded="false" aria-controls="audit"><span class="long">Access audit</span><span class="short">Audit</span></button>
+    <button type="button" class="btn ghost" id="about-btn">About</button>
+  </nav>
+</header>
+
+<main>
+  <section id="planner" class="panel planner" aria-label="Route planner">
+    <button type="button" class="sheet-toggle" id="sheet-toggle" aria-expanded="true" aria-controls="planner-body">
+      <span class="grabber" aria-hidden="true"></span><span class="sr-only">Show or hide route details</span>
+    </button>
+    <div class="planner-head">
+      <div class="fields">
+        <div class="combo">
+          <label class="sr-only" for="from-input">From</label>
+          <span class="pin pin-a" aria-hidden="true">A</span>
+          <input id="from-input" type="text" role="combobox" aria-expanded="false" aria-controls="from-list" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="From">
+          <button type="button" class="clear" id="from-clear" aria-label="Clear start" hidden></button>
+          <ul id="from-list" class="options" role="listbox" aria-label="Start suggestions" hidden></ul>
+        </div>
+        <div class="combo">
+          <label class="sr-only" for="to-input">To</label>
+          <span class="pin pin-b" aria-hidden="true">B</span>
+          <input id="to-input" type="text" role="combobox" aria-expanded="false" aria-controls="to-list" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="To: building, code or room">
+          <button type="button" class="clear" id="to-clear" aria-label="Clear destination" hidden></button>
+          <ul id="to-list" class="options" role="listbox" aria-label="Destination suggestions" hidden></ul>
+        </div>
+        <button type="button" class="icon-btn swap" id="swap" aria-label="Swap start and destination"></button>
+      </div>
+      <div id="profiles" class="segmented" role="radiogroup" aria-label="Travel profile"></div>
+    </div>
+    <div id="planner-body" class="planner-body">
+      <div id="chips"></div>
+      <div id="place-card"></div>
+      <div id="result"></div>
+    </div>
+  </section>
+
+  <aside id="audit" class="panel drawer" aria-label="Access audit" hidden>
+    <header class="drawer-head">
+      <h2>Access audit</h2>
+      <button type="button" class="icon-btn" id="audit-close" aria-label="Close access audit"></button>
+    </header>
+    <div id="audit-body" class="drawer-body"></div>
+  </aside>
+</main>
+
+<div id="report-banner" class="banner" role="status" hidden>
+  <span>Click a path to block it</span>
+  <button type="button" class="btn small" id="report-cancel">Cancel</button>
+</div>
+
+<p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+<div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+<footer class="attribution" id="attribution"></footer>
+
+<dialog id="about" aria-labelledby="about-title">
+  <div class="dialog-head">
+    <h2 id="about-title">About</h2>
+    <button type="button" class="icon-btn" id="about-close" aria-label="Close"></button>
+  </div>
+  <div id="about-body" class="dialog-body"></div>
+</dialog>
+
+<div id="loading" class="loading" role="status" aria-live="polite">
+  <svg viewBox="0 0 32 32" width="44" height="44" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#5ef2a0"/><path d="M7 10l4.5 12 4.5-9 4.5 9L25 10" fill="none" stroke="#06140c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <p class="loading-title">Wayfound</p>
+  <p class="loading-step" id="loading-step">Loading</p>
+  <div class="loading-bar" aria-hidden="true"><span></span></div>
+</div>
+
+<div id="fatal" class="fatal" role="alert" hidden>
+  <h1>Wayfound could not start</h1>
+  <p id="fatal-message"></p>
+  <p id="fatal-hint" class="muted"></p>
+  <button type="button" class="btn primary" id="fatal-reload">Reload</button>
+</div>
+
+<noscript><div class="fatal"><h1>Wayfound needs JavaScript</h1><p>The 3D map and the route planner run in your browser.</p></div></noscript>
+
+<script src="vendor/maplibre-gl.js"></script>
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

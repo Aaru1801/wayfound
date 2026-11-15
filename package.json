@@ -1,0 +1,12 @@
+{
+  "name": "wayfound",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Step-free, door-to-door campus navigation on a 3D map built from open data",
+  "scripts": {
+    "start": "python3 -m http.server 4310 --bind 127.0.0.1",
+    "test": "node --test tests/*.test.mjs",
+    "build:offline": "node tools/build_offline.mjs"
+  }
+}

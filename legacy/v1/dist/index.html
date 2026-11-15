@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#153d34"><meta name="description" content="Explore Google Maps, university floor plans, and a route accessibility demo at the University of Waterloo and McMaster University.">
+<title>Wayfound · Waterloo &amp; McMaster</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23153d34'/%3E%3Cpath d='M14 20l9 25 9-18 9 18 9-25' fill='none' stroke='%23c8f297' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="route-editor.css">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<header class="topbar"><a class="brand" id="brand-home" href="#" aria-label="Wayfound home"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8l6 17 6-12 6 12 6-17"/></svg></span>wayfound</a><button class="text-button light" id="about-button">Behind the build <span aria-hidden="true">↗</span></button></header>
+<main id="main" tabindex="-1">
+<section class="intro"><div><h1>Campus access <em>at Waterloo &amp; McMaster.</em></h1><p class="subtitle">Edit a walking route on the map, find a room, or try the step-free closure simulation.</p></div><button class="demo-button" id="demo-button"><span class="play-icon" aria-hidden="true">▶</span> Try the 60-second demo <span aria-hidden="true">↗</span></button></section>
+<div class="campus-switcher"><div class="campus-options" role="group" aria-label="Choose campus"><button data-campus="waterloo" aria-pressed="true"><span class="campus-initial">W</span><span>Waterloo</span></button><button data-campus="mcmaster" aria-pressed="false"><span class="campus-initial">M</span><span>McMaster</span></button></div><div class="view-options" role="group" aria-label="Wayfound view"><button data-view="maps" aria-pressed="true">Maps &amp; rooms</button><button data-view="demo" aria-pressed="false">Route simulation</button></div></div>
+<section class="real-maps" id="maps-view" aria-label="Maps and rooms" hidden>
+  <div class="live-map-card">
+    <div class="live-map-heading"><div><h2 id="real-map-title"></h2><p id="real-map-region"></p></div></div>
+    <div id="outdoor-route-editor"></div>
+    <div class="live-map-links"><a id="live-official-campus" target="_blank" rel="noopener noreferrer">Official campus map ↗</a><span id="real-map-resources"></span></div>
+    <details id="map-reference" class="map-reference"><summary>Google Maps reference</summary>
+      <iframe id="google-campus-map" title="Google Maps campus view" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="live-map-links"><a id="live-google-campus" target="_blank" rel="noopener noreferrer">Open campus in Google Maps ↗</a></div>
+    </details>
+  </div>
+  <div class="maps-sidebar">
+    <section class="map-tools-card" aria-labelledby="directions-tool-title">
+      <h2 id="directions-tool-title">Route endpoints</h2>
+      <div class="map-selects"><label for="map-origin">From<select id="map-origin"></select></label><label for="map-destination">To<select id="map-destination"></select></label></div>
+      <p>Choose buildings here, or move the pins directly on the map. Outdoor routes can include stairs and end near the building.</p>
+    </section>
+    <section class="map-tools-card rooms-card" aria-labelledby="room-tool-title">
+      <div class="room-heading"><h2 id="room-tool-title">Find a room</h2><a id="live-floor-plans" target="_blank" rel="noopener noreferrer">Official floor plans ↗</a></div>
+      <p id="floor-plan-note"></p>
+      <label class="room-search-label" for="room-query">Search the sourced room sample</label>
+      <input id="room-query" type="search" placeholder="Room number or building" autocomplete="off" maxlength="80" aria-describedby="room-status">
+      <p class="room-status" id="room-status" role="status"></p>
+      <ul id="room-results" class="room-results"></ul>
+    </section>
+  </div>
+</section>
+<div id="simulation-view" hidden>
+<p class="simulation-note">Real landmarks · Simulated paths, distances, slopes and closures</p>
+<div id="demo-banner" class="demo-banner" hidden></div>
+<div class="workspace">
+<aside class="planner" id="planner" aria-label="Route planner">
+<div class="section-title"><span class="eyebrow">ROUTE PLANNER</span></div>
+<div class="journey-inputs"><div class="journey-line" aria-hidden="true"><span></span><i></i><b></b></div><div class="select-stack"><label for="origin">STARTING FROM</label><select id="origin"></select><div class="input-divider"></div><label for="destination">HEADING TO</label><select id="destination"></select></div><button class="swap-button" id="swap" aria-label="Swap start and destination">⇅</button></div>
+<div class="preference-title">Travel profile</div>
+<div class="profiles" role="group" aria-label="Travel profile"><button data-profile="wheelchair" class="profile active" aria-pressed="true"><span class="profile-icon" data-icon="wheelchair"></span>Step-free</button><button data-profile="stroller" class="profile" aria-pressed="false"><span class="profile-icon" data-icon="stroller"></span>Stroller</button><button data-profile="walking" class="profile" aria-pressed="false"><span class="profile-icon" data-icon="walk"></span>Walking</button></div>
+<p class="profile-description" id="profile-description"></p>
+<details class="preferences"><summary>Fine-tune your needs <span>＋</span></summary><label class="range-label" for="slope">Maximum slope <strong id="slope-value">5%</strong></label><input type="range" min="0" max="15" step="1" value="5" id="slope"><label class="check-label"><input type="checkbox" id="avoid-rough" checked> Avoid uneven surfaces</label></details>
+<div id="route-summary" aria-live="polite"></div>
+<div class="planner-actions"><button class="secondary-button" id="share-button"><span data-icon="share"></span>Share route</button><button class="secondary-button" id="download-button" aria-label="Download route directions"><span data-icon="download"></span>Save</button></div>
+<div class="planner-bottom"><span data-icon="shield"></span><p>Your needs stay on this device.<br><strong>No account. No tracking.</strong></p></div>
+</aside>
+<section class="map-panel" aria-label="Campus map and access overview">
+<div class="map-toolbar"><div class="campus-heading"><span data-icon="map"></span><div><strong id="campus-name"></strong><span id="campus-region"></span></div></div><button class="map-view-button" id="graph-button" aria-pressed="false"><span data-icon="nodes"></span> Show network</button></div>
+<div class="map-container"><svg id="campus-map" viewBox="0 0 1000 720" role="group" aria-labelledby="map-title" aria-describedby="map-description"><title id="map-title">Campus route schematic</title><desc id="map-description">Select a destination to view a simulated route.</desc></svg><div class="map-label">SCHEMATIC ROUTE MODEL</div><div class="map-controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-reset" aria-label="Fit map"><span data-icon="expand"></span></button></div><div class="map-legend"><span><i class="legend-route"></i>Your route</span><span><i class="legend-blocked"></i>Unavailable</span><span id="shortest-legend"><i class="legend-shortest"></i>Shortest walking route</span></div></div>
+<div class="access-strip"><div><span class="pulse-dot"></span><strong id="reachability-number">5 / 5</strong><span>destinations reachable</span></div><button id="impact-button">Explore repair impact <span aria-hidden="true">↗</span></button></div>
+<a id="campus-map-link" class="official-map" target="_blank" rel="noopener noreferrer"></a>
+</section>
+</div>
+<section class="lower-grid">
+<div class="directions-panel"><div class="panel-heading"><div><h2>Simulated route steps</h2></div><span class="pill" id="directions-count">Route details</span></div><ol id="directions"></ol></div>
+<div class="conditions-panel"><div class="panel-heading"><div><h2>Simulate a closure</h2></div><span class="live-pill">LOCAL DEMO</span></div><p class="conditions-description">Change a connection and watch your route respond.</p><div id="barrier-list"></div><button class="report-button" id="report-button"><span data-icon="plus"></span> Add a simulated barrier</button><p class="conditions-footnote">Simulated closures are saved for one hour on this device.</p></div>
+</section>
+</div>
+<footer><div class="footer-brand">wayfound</div><p>ONHacks 2026 prototype · University of Waterloo and McMaster University</p><button id="reset-button" class="text-button">Reset demo <span aria-hidden="true">↺</span></button></footer>
+</main>
+<dialog id="modal" aria-labelledby="modal-eyebrow"><div class="modal-top"><span class="eyebrow" id="modal-eyebrow">WAYFOUND</span><button id="modal-close" aria-label="Close dialog">×</button></div><div id="modal-content"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
